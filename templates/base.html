@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask-{% block title %} {% endblock %}</title>
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/output.css') }}">
+      {% block head %}
+
+      {% endblock %}
+</head>
+<body class=" overflow-hidden  ">
+    
+    <main class="mx-auto flex max-h-screen w-full max-w-lg flex-col  md:max-w-md lg:max-w-lg flex-wrap">
+     {% block content %} 
+
+      {% endblock %}
+    </main>
+   
+</body>
+</html>

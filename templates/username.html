@@ -1,0 +1,300 @@
+
+{% extends 'base.html' %}
+
+
+
+{% block title %} username {% endblock %}
+
+{% block head %}
+<!-- adding the boxicon cdn-->
+<link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
+{% endblock %}
+
+<!--Section for the content to be displayed  in the body section-->
+{% block content %}
+
+    <div class=" min-h-screen font-alata  bg-amber-700"><!--full height of the flex with alata font-->
+
+        <div class="flex items-center gap-15 py-20"> <!-- aligning the item of the  flex children as <cross_icon> <status bar>  <step_count>  in  cross-axis of the  page -->
+
+
+             <i class="bx bx-x text-[#533B07] text-2xl px-3"></i>
+
+            <div class="bg-[#D9D9D9] h-[15px] w-[248px] rounded-full overflow-hidden">
+            <span class="block bg-[#D7B66F] h-full w-[0px] rounded-full transition-[width] duration-1000 ease-out" id="status"></span>
+    
+            </div>
+
+            <span class="text-[#0A5457]">
+                Step {{ current_step+1 }} of 3
+            </span>
+        
+        </div>
+
+
+        <div class="py-[30px] px-5">
+            <h2 class=" text-[#4D4D4C] text-3xl "> Please choose your avatar</h2>
+            <h3 class="text-[#BEBDBB] pt-2 text-xl">This is how other players will see you</h3>
+        </div>
+
+<!--Avatar picker-->
+        <div class=" flex flex-row px-5  py-0 my-0 overflow-y-auto h-[300px] ">
+            <div class=" h-[360px] w-[500px] ">
+
+                <div class="grid grid-cols-3 gap-4  p-4 py-4"> <!--  we will  get three columns and in these  3,3  random avatars wil be  appearing!-->
+                
+                    {% for seed in seed %}<!--looping through each and every single UUID seed received from the route.py-->
+                       <!--the items would be placed by rows by default  and  not by column in the  gird-->
+                        <span class="flex justify-center">
+    <img src="https://api.dicebear.com/10.x/{{ style }}/jpg?seed={{ seed }}&size=300" 
+         alt="Avatar image" 
+         width="100" 
+         height="100" 
+         style="border-radius: 50%;"
+         class="avatar-image">
+</span>
+
+                        
+
+                    {% endfor %}
+                </div>
+
+            </div>
+    
+        </div>
+
+        <div class="flex items-center space-x-2 justify-center py-10"><!-- the OR line below the suggested avatars-->
+            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent w-50"></div>
+
+            <span class="text-gray-500 text-[20px]">OR</span>
+  
+            <div class="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent w-50"></div>
+
+        </div>
+
+
+<!-- Update the action to point to main.test -->
+<form id="profile-pic-form" action="{{ url_for('main.test') }}" method="POST" enctype="multipart/form-data">
+    <div class="flex justify-center w-full my-0 p-[-10px] mt-0">
+        <input 
+            type="file" 
+            id="photoInput" 
+            name="avatar_file" 
+            accept="image/*" 
+            class="hidden" 
+            onchange="submitPhoto()"
+        >
+
+        <button type="button" onclick="document.getElementById('photoInput').click()"
+            class="flex items-center justify-center gap-2 opacity-70 w-[210px] h-[30px] rounded-full text-xl cursor-pointer" id="upload_btn_avatar">
+            <i class="bx bx-arrow-to-top text-[#0A5457] text-2xl"></i>
+            <span class="text-[#6f6f6f] opacity-70 underline">Upload a Photo</span>
+        </button>
+    </div>
+</form>
+
+
+
+
+<!-- Flash Messages Alert Block -->
+<div id="flash-container" class="flex justify-center w-full px-5">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} flex items-center justify-center gap-2 w-full max-w-md p-4 rounded-lg text-center" id="flash-message" data-category="{{ category }}">
+                    
+                    <!-- Text and Icon wrapped inside a single inline-flex row -->
+                    <span class="inline-flex items-center justify-center gap-2 font-medium {% if category == 'error' %}text-red-400{% else %}text-[#0A5457]{% endif %}">
+                        {{ message }}
+
+                        <!-- Dismiss icon button placed on the exact same horizontal level -->
+                        {% if category == 'error' %}
+                            <button type="button" id="dismiss-btn" onclick="dismissError()" class="flex items-center justify-center hover:scale-110 transition-transform" aria-label="Dismiss">
+                                <i class="bx bx-x text-2xl leading-none"></i>
+                            </button>
+                        {% endif %}
+                    </span>
+                    
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+
+
+
+    <form id="avatar-pic-form" action="{{ url_for('main.test') }}" method="POST" enctype="multipart/form-data">
+
+        <div class=" flex justify-center w-full py-20">
+        <!--regular hidden text input to  submit the data as  a  string -->
+        <input type="hidden" name="avatar_file" id="selected-avatar-input">
+        <button  type="button" class="flex items-center justify-center gap-2 bg-[#D7B66F] opacity-60 w-[311px] h-[60px] rounded-full text-2xl text-[#FFFFFF]" id="continue_btn_avatar" onclick="submitAvatar()" >
+            Continue
+        </button>
+
+
+        </div>
+    </form>
+        
+
+
+   
+
+</div>
+
+
+
+
+<!-- this  section  wil have js for Load/various events -->
+<script>
+
+status_bar= document.getElementById("status");
+let  refresh_count=0; 
+
+document.addEventListener("DOMContentLoaded", () => {
+    
+  statusChange();
+
+   
+
+});
+
+function statusChange() {
+    status_bar.style.width="150px";
+}  
+
+// function to  trigger when the  submit button is pressed!
+
+function submitPhoto() {
+    const fileInput = document.getElementById('photoInput'); 
+    // fileInput is a list that stores the  selcted file
+
+    if (fileInput.files && fileInput.files[0]) {
+        // Automatically submits the form to Flask
+        document.getElementById('profile-pic-form').submit();
+    }
+}
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const flashMessage = document.getElementById("flash-message");
+    const uploadBtn = document.getElementById("upload_btn_avatar");
+    const continueBtn= document.getElementById('continue_btn_avatar');
+
+
+    if (flashMessage) {
+        const category = flashMessage.getAttribute("data-category");
+
+        if (category === "success") {
+            // Rule 1: Hide upload button on success
+            uploadBtn.style.display = "none";
+            continueBtn.style.backgroundColor='#f3aa0c';
+
+
+
+        } 
+        else if (category === "error") {
+            // Rule 2: Lock upload button until error is dismissed
+            uploadBtn.disabled = true;
+            uploadBtn.style.opacity = "0.5"; // Visual cue that it is locked
+        }
+    }
+});
+
+// Rule 3: Unlock upload when dismiss is clicked
+function dismissError() {
+    const flashMessage = document.getElementById("flash-message");
+    const uploadBtn = document.getElementById("upload_btn_avatar");
+
+
+    if (flashMessage) {
+        flashMessage.remove(); // Remove the error message from view
+    }
+    
+    // Allow the user to upload again
+    uploadBtn.disabled = false;
+    uploadBtn.style.opacity = "1"; 
+}
+
+//   seed  selection checker..
+const continueBtn= document.getElementById('continue_btn_avatar');
+const avatars= document.querySelectorAll('.avatar-image');
+const upload= document.getElementById('upload_btn_avatar');
+console.log(typeof(avatars));
+
+
+let selectedAvatarIndex = null;
+let image=null;
+
+//event listener to lookout for the clicks..
+
+avatars.forEach((avatar, index) => {
+  avatar.addEventListener('click', () => {
+    
+    
+    /* function submitPhoto() {
+    const fileInput = document.getElementById('photoInput');
+    if (fileInput.files && fileInput.files[0]) {
+        // Automatically submits the form to Flask
+        document.getElementById('profile-pic-form').submit();
+    }
+} */
+
+    // 1. Remove border from the previously selected avatar
+    if (selectedAvatarIndex !== null && avatars[selectedAvatarIndex]) {
+      avatars[selectedAvatarIndex].style.border = "none";
+    }
+
+    // 2. Update the tracking index to the current one
+    selectedAvatarIndex = index;
+    
+    // FIX: Get the image element correctly from the collection
+    image = avatars[selectedAvatarIndex]; 
+    console.log(image);
+
+    console.log(`Avatar position ${selectedAvatarIndex} has been selected!`);
+    
+    // 3. Apply the red border to the newly selected avatar
+    avatar.style.border = "3px solid red";
+
+    //extracting the url of the selected avatar
+    document.getElementById('selected-avatar-input').value = avatar.getAttribute('src') || avatar.dataset.seed;
+
+    if(upload) upload.style.display='none';
+    if(continueBtn) continueBtn.style.backgroundColor='#f3aa0c';
+
+
+  });
+});
+
+// Form will only submit if the avatar has been  clicked and the the url /seed has bene captured.
+function submitAvatar(){
+    if(document.getElementById('selected-avatar-input').value) {
+        document.getElementById('avatar-pic-form').submit();
+    } 
+    
+    else {
+        alert("Please select an avatar first!");
+    }
+
+
+
+
+}
+
+
+   
+
+
+
+
+
+
+</script>
+
+
+{% endblock %}

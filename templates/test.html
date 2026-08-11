@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{%  block content %}
+
+<div class="grid grid-cols-3 gap-4  p-4">
+    {% for seed in seed %}
+        <!-- 2. Removed row-span-2 so items flow naturally into the 3-column grid -->
+        <span class="flex justify-center">
+            <img src="https://api.dicebear.com/10.x/{{ style }}/svg?seed={{ seed }}" 
+                 alt="Random Avatar" 
+                 width="100" 
+                 height="100" 
+                 style="border-radius: 50%;">
+        </span>
+    {% endfor %}
+    </div>
+
+{% endblock %}

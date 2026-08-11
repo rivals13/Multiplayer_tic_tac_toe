@@ -1,0 +1,35 @@
+{% extends "base.html"  %}
+
+{% block title%} test {% endblock %}
+
+{% block head %}
+<!-- Basic Icons -->
+<link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
+
+
+{% endblock %}
+
+
+{% block content %} 
+
+    <div class="min-h-screen bg-red-600">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" class=" align-bottom px-17 py-17 ">
+        
+        <div> 
+            
+            <a href="{{url_for('main.test')}}" class="flex">
+            <button class="bg-[#0A5457] text-white w-full rounded-4xl h-[54px] my-7 font-alata px-2 text-3xl">Single Player
+                <i class="bx bx-user px-5  text-4xl align-middle"></i>
+            </button>
+            </a>
+
+            <button class="bg-[#D7B66F] text-white  rounded-full w-full h-[54px] my-3  text-3xl font-alata"> Multiplayer
+                <i class="bx bx-group text-4xl align-sub px-5"></i>
+            </button>
+        </div>
+
+        <div class="justify-bottom float-end text-6xl text-[#533B07] py-40"><i class="bx bx-cog"></i></div>
+
+    </div>
+
+{% endblock %}

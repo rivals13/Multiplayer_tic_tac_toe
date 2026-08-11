@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+
+
+{% block title %} username {% endblock %}
+{% block head %}
+<!-- adding the boxicon cdn-->
+<link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
+{% endblock %}
+
+
+
+<!--Section for the content to be displayed  in the body section-->
+{% block content %}
+
+      <div class=" min-h-screen font-alata"><!--full height of the flex with alata font-->
+
+        <div class="flex items-center gap-15 py-20"> <!-- aligning the item of the  flex children as <cross_icon> <status bar>  <step_count>  in  cross-axis of the  page -->
+
+
+             <i class="bx bx-x text-[#533B07] text-2xl px-3"></i>
+
+            <div class="bg-[#D9D9D9] h-[15px] w-[248px] rounded-full overflow-hidden">
+            <span class="block bg-[#D7B66F] h-full w-[0px] rounded-full transition-[width] duration-1000 ease-out" id="status"></span>
+    
+            </div>
+            
+            <span class="text-[#0A5457]">
+                Step 3 of 3
+            </span>
+        
+        </div>
+
+        <div class=" flex items-center">
+         <img src="{{url_for('static', filename='assets/confetti.png')}}" alt="image of the confetti">
+         <img src="{{url_for('static', filename='uploads/avatar_image.jpg')}}" alt="img" class=" border-rose-400 border-8   rounded-full  h-[200px] w-[200px]">   
+         <img src="{{url_for('static', filename='assets/confetti.png')}}" alt="image of the confetti">
+      
+        </div>
+
+        </div>
+<script>
+      status_bar= document.getElementById("status");
+      let  refresh_count=0; 
+
+      document.addEventListener("DOMContentLoaded", () => {  
+      statusChange();
+      });
+
+      function statusChange() {
+         status_bar.style.width="248px";
+      }
+
+
+        </script>
+
+{% endblock %}

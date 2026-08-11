@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="styles.css">
+    <title>Hello, world!</title>
+  </head>
+
+ <div class="grid h-[500px] w-[500px] grid-cols-3 justify-center bg-red-300 py-1">
+  
+
+  <button onclick="replaceWithImage(this)" class="w-full h-full overflow-hidden border-r-4 border-b-4 bg-red-300"> </button>
+  
+  <button class="border-r-5 border-b-5 bg-red-300"></button>
+  <button class="border-b-5 bg-red-300"></button>
+
+  <button class="border-r-4 border-b-4 bg-red-300"></button>
+  <button class="border-r-5 border-b-5 bg-red-300"></button>
+  <button class="border-b-5 bg-red-300"></button>
+
+  <button class="border-r-4 bg-red-300"></button>
+  <button class="border-r-5 bg-red-300"></button>
+  <button class="bg-red-300"></button>
+</div>
+
+<script>
+
+    function replaceWithImage(buttonElement) {
+
+      if(buttonElement.style.backgroundImage){
+        buttonElement.style.backgroundImage= "";
+      }
+      
+
+      else{
+          buttonElement.style.backgroundImage =
+        "url('https://i.imgur.com/XO2M0fd.png')";
+    buttonElement.style.backgroundSize = "cover";
+    buttonElement.style.backgroundPosition = "center";
+    buttonElement.style.backgroundRepeat = "no-repeat";
+      }
+
+      }
+    
+  
+</script>
+
+
+</html>
