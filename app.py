@@ -25,7 +25,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 
 
-# Register your blueprint here
+# Registering the main blueprint here
 app.register_blueprint(main_bp)
 
 if __name__ == "__main__":

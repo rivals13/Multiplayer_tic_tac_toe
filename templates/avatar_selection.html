@@ -13,9 +13,9 @@
 <!--Section for the content to be displayed  in the body section-->
 {% block content %}
 
-    <div class=" min-h-screen font-alata  bg-amber-700"><!--full height of the flex with alata font-->
+    <div class=" min-h-screen font-alata"><!--full height of the flex with alata font-->
 
-        <div class="flex items-center gap-15 py-20"> <!-- aligning the item of the  flex children as <cross_icon> <status bar>  <step_count>  in  cross-axis of the  page -->
+        <div class="flex items-center justify-between w-full px-4 py-8"> <!-- aligning the item of the  flex children as <cross_icon> <status bar>  <step_count>  in  cross-axis of the  page -->
 
 
              <i class="bx bx-x text-[#533B07] text-2xl px-3"></i>
@@ -73,8 +73,8 @@
         </div>
 
 
-<!-- Update the action to point to main.test -->
-<form id="profile-pic-form" action="{{ url_for('main.test') }}" method="POST" enctype="multipart/form-data">
+<!-- Update the action to point to main.avatar_selection -->
+<form id="profile-pic-form" action="{{ url_for('main.avatar_selection') }}" method="POST" enctype="multipart/form-data">
     <div class="flex justify-center w-full my-0 p-[-10px] mt-0">
         <input 
             type="file" 
@@ -124,7 +124,7 @@
 
 
 
-    <form id="avatar-pic-form" action="{{ url_for('main.test') }}" method="POST" enctype="multipart/form-data">
+    <form id="avatar-pic-form" action="{{ url_for('main.avatar_selection') }}" method="POST" enctype="multipart/form-data">
 
         <div class=" flex justify-center w-full py-20">
         <!--regular hidden text input to  submit the data as  a  string -->

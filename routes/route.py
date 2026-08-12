@@ -19,8 +19,8 @@ def home():
     return render_template('landing.html')
 
 
-@main_bp.route("/test", methods=['GET', 'POST'])
-def test():
+@main_bp.route("/avatar_selection", methods=['GET', 'POST'])
+def avatar_selection():
     # --- POST METHOD (Handling Submission) ---
     global method
     method = None # The  variable to check the  type of  upload
@@ -99,7 +99,7 @@ def test():
         
     chosen_style = "shapes" 
     return render_template(
-        "username.html", 
+        "avatar_selection.html", 
         style=chosen_style, 
         seed=session['suggested_seeds'], 
         current_step=1
