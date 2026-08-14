@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}multiplayer_mode{% endblock %}
+
+{% block head %}
+<!-- adding the boxicon cdn-->
+<link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+ <div class=" min-h-screen font-alata"><!--full height of the flex with alata font-->
+
+
+    <div id="intial_load_content">
+        <div class="flex items-center justify-between w-full px-4 py-8"> <!-- aligning the item of the  flex children as <cross_icon> <status bar>  <step_count>  in  cross-axis of the  page -->
+             
+            <i class="bx bx-chevron-left text-[#533B07] text-5xl px-3"></i>
+            <i class="bx bx-cog text-[#533B07] text-4xl"></i>
+        </div>
+        
+        <div class="relative flex items-center w-full flex-col gap-0.8 mt-[150px]">
+
+            <h1 class="text-[#4D4D4C] text-2xl">Enter the player’s username</h1>
+            <h3 class="text-[#BEBDBB]">This is the player you are playing with</h3>
+  
+            <input type="text" 
+            id="inputText" 
+            name="text" 
+            placeholder="@ ViciousRegister02" 
+            class=" my-[40px] w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none  focus:border-[#D7B66F] transition duration-150 ease-in-out "/>
+
+        
+    </div>
+
+
+
+         
+        <div class="flex items-center justify-center ">
+            <button class="bg-[#D7B66F] w-[314px] h-[54px] rounded-full text-3xl text-[#FFFFFF] text-center " id="continueBtn" onclick="Continue()">Search</button>
+        </div>
+ </div>
+    
+    <!-- section for the  skeleton effect -->
+     <div>
+
+     </div id="continue_load_content">
+     
+
+
+        </div>
+ {% endblock %}

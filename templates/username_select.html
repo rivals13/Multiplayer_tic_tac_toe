@@ -1,4 +1,4 @@
-{% extends 'base.hml'%}
+{% extends 'base.html'%}
 
 {% block title %}username_selection {% endblock %}
 
@@ -17,7 +17,7 @@
              <i class="bx bx-x text-[#533B07] text-2xl px-3"></i>
 
             <div class="bg-[#D9D9D9] h-[15px] w-[248px] rounded-full overflow-hidden">
-            <span class="block bg-[#D7B66F] h-full w-[0px] rounded-full transition-[width] duration-1800 ease-out" id="status"></span>
+            <span class="block bg-[#D7B66F] h-full w-[0px] rounded-full transition-[width] duration-1000 ease-out" id="status"></span>
     
             </div>
 
@@ -26,6 +26,86 @@
             </span>
         
         </div>
+
+        <div class="py-15">
+            <h1 class="text-3xl">Choose a username</h1>
+            <h3 class="text-[#BEBDBB]">This will be your username for the game</h3>
+
+        </div>
+
+    <div class="relative flex items-center w-full">
+  
+    <input type="text" 
+       id="inputText" 
+       name="text" 
+       placeholder="@ ViciousRegister02" 
+       class="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none  focus:border-[#D7B66F] transition duration-150 ease-in-out"/>
+    
+       <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 p-1 " id="regenerate" onclick="recreateUsername()"> <i class="bx bx-refresh-ccw"></i></button>
+    
+    </div>
+
+    <div>
+        <h1 class="py-[20px] opacity-50">Suggestions</h1>
+         <div class="grid grid-cols-2 gap-x-6 gap-y-4 px-5 ">
+            {% for username in username %}
+            <button class="bg-[#E2E1E0] text-center w-[200px] h-[30px] rounded-full text-[#2B2A29]" id="username" onclick="updateUsername(this)">{{username}}</button>
+
+            {% endfor %}
+         </div>
+    </div>
+
+    <div>
+         <a>
+        <div class="flex items-center justify-center my-[132px]">
+  <button class="bg-[#D7B66F] w-[314px] h-[54px] rounded-full text-3xl text-[#FFFFFF] text-center" id="continueBtn" onclick="Continue()">Continue</button>
+        </div>
+        </a>
+    </div>
+
+
+
+        </div>
+ 
+
+<script>
+
+status_bar= document.getElementById("status");
+let  refresh_count=0; 
+
+document.addEventListener("DOMContentLoaded", () => { 
+  statusChange();
+});
+
+function statusChange() {
+    status_bar.style.width="90px";
+}  
+
+function updateUsername(buttonElement){
+    let username= buttonElement.textContent.trim();
+    let placeholder= document.getElementById('inputText');
+
+    placeholder.value= username;
+}
+
+function recreateUsername(){
+window.location.reload();    
+}
+
+function Continue(){
+
+    let inputField= document.getElementById('inputText');
+    
+    if(inputField && inputField.value){
+        console.log(inputField.value);
+        window.location.href = "{{ url_for('main.avatar_selection') }}";
+    }
+}
+
+
+
+
+</script>
 
 
 {% endblock %}

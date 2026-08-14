@@ -4,6 +4,8 @@ import requests
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, session
 from werkzeug.utils import secure_filename
 from PIL import Image
+from wonderwords import RandomWord
+import random
 
 main_bp = Blueprint('main', __name__)
 
@@ -17,6 +19,29 @@ def allowed_file(filename):
 @main_bp.route("/")
 def home():
     return render_template('landing.html')
+
+@main_bp.route("/username_selection" , methods=['POST','GET'])
+def username_selection():
+
+    r = RandomWord()
+
+    # random nouns and adjectives for the usernames
+    adjs = r.random_words(20, include_parts_of_speech=["adjectives"], word_max_length=8)
+    nouns = r.random_words(20, include_parts_of_speech=["nouns"], word_max_length=7)
+    username=[]
+
+    #  Generate 7 unique, professional usernames
+    for _ in range(7):
+        # Pick one random item at a time so combinations are completely unpredictable
+        adj = random.choice(adjs).capitalize()
+        noun = random.choice(nouns).capitalize()
+        number = random.randint(10, 99)
+        username.append(f"{adj}{noun}_{number}")
+    print(type(username))
+    print(username)
+
+    return render_template('username_select.html',username=username)
+
 
 
 @main_bp.route("/avatar_selection", methods=['GET', 'POST'])
@@ -113,6 +138,10 @@ def final():
     return render_template(
         'username_avatar.html',
         method=method)
+
+@main_bp.route("/multiplayer")
+def multiplayer():
+    return render_template('multiplayer_1.html')
 
 @main_bp.route("/krishna") 
 def krishna():
