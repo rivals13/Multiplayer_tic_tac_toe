@@ -33,7 +33,7 @@ def username_selection():
     nouns = r.random_words(20, include_parts_of_speech=["nouns"], word_max_length=7)
     username=[]
 
-    #  Generate 7 unique, professional usernames
+    #  Generate 7 unique,and userames in a pattern that are mostly suggested...
     for _ in range(7):
         # Pick one random item at a time so combinations are completely unpredictable
         adj = random.choice(adjs).capitalize()
