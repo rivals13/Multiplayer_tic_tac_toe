@@ -44,8 +44,46 @@
      <div>
 
      </div id="continue_load_content">
-     
+        <h1 id="textContinue" class="hidden">Searching for players..</h1>
+        <div class="max-w-sm w-full mx-auto p-4">
+            <div class="animate-pulse flex space-x-4">
+                
+                <!-- Square Image/Icon Placeholder -->
+                <div class="bg-gray-200 h-12 w-12 rounded-none"></div>
+                
+                <!-- Text Content Placeholders -->
+                <div class="flex-1 space-y-4 py-1">
+                <!-- Header Line -->
+                <div class="h-4 bg-gray-200 rounded-none w-3/4"></div>
+                
+                <!-- Body Lines -->
+                <div class="space-y-2">
+                    <div class="h-3 bg-gray-200 rounded-none"></div>
+                    <div class="h-3 bg-gray-200 rounded-none w-5/6"></div>
+                </div>
+                </div>
+                
+            </div>
+        </div>
+
 
 
         </div>
+
+        <script>
+            function Continue(){
+                let inputBox= document.getElementById('inputText');
+                let continueBtn = document.getElementById('continueBtn');
+                const initialDiv = document.querySelector('#intial_load_content');
+
+
+                if(inputBox && inputBox.value){
+                    alert('ok');
+                    initialDiv.style.marginTop= "-90px";
+                    continueBtn.style.display='none';
+                    document.getElementById('textContinue').classList.remove('hidden');
+                }
+            }
+
+        </script>
  {% endblock %}

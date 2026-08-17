@@ -1,4 +1,6 @@
 import os
+import io
+import yara
 import uuid
 import requests
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, session
@@ -6,6 +8,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from wonderwords import RandomWord
 import random
+
 
 main_bp = Blueprint('main', __name__)
 
@@ -86,29 +89,67 @@ def avatar_selection():
                 return redirect(request.url)
 
             if file and allowed_file(file.filename):
-                # Reset file pointer to beginning before reading
-                file.seek(0)
-                img = Image.open(file)
-                
-                if img.size[0] >= 300 and img.size[1] >= 300:
-                    filename = secure_filename(file.filename)
-
-                    extension = filename.rsplit('.', 1)[1].lower() # getting th extension of the  file to append  later
-                    filename = f"upload_avatar.{extension}"
-                    save_to = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-                    
-                    # Reset pointer again before saving file to disk
+                try:
+                    # sets the pointer to the initial position and  will read the  file into memory!
                     file.seek(0)
-                    file.save(save_to)
-                
-                    flash('Uploaded successfully!', 'success')
-                    success = True
-                    method= 'file_upload'
+                    file_bytes = file.read()
 
-                else:
-                    flash('Dimensions too small (expected: at least 300x300 px).', 'error')
+                    # loading the yara script
+                    # Compiles rules on the fly only when the route is hit
+                    rules = yara.compile(filepath='scanner_rules.yar')
+                    matches = rules.match(data=file_bytes) # checks  for the signature matches
+
+                    #  this will run when the matches will be found!
+                    if matches:
+                        print(f"SECURITY ALERT: Blocked malicious file upload matching: {matches}")
+                        flash('File rejected: Malicious content or exploit detected.', 'error')
+                        return redirect(request.url)
+
+                    # if the image is safe  the  scanning  will move further...
+
+                    '''
+                    since the pillow library is not able read raw  data stream of  0's and  1's(bytes).
+                    Thus, to make  sure the pillow  library is able to access
+                    the  file,  we will be simulating via the io.BytesIO.
+                    meaning it will create an in-memory binary stream. 
+                    meaning we can read from it, write to it, and pass it to 
+                    functions that expect a file object
+                    without ever saving anything to your physical hard drive.
+                    '''
+                    file_stream = io.BytesIO(file_bytes)
+                    img = Image.open(file_stream)
+                    
+                    if img.size[0] >= 300 and img.size[1] >= 300:
+                        filename = secure_filename(file.filename)
+                        extension = filename.rsplit('.', 1)[1].lower()
+                        filename = f"upload_avatar.{extension}"
+                        save_to = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                        '''
+                        the save_to variable is basically  creating the path for all systems...
+
+                        if the  UPLOAD_FOLDER configuration is 'static/uploads' 
+                        and the filename variable is 'profile.jpg', this line combines them.
+
+                        The variable save_to will instantly become:
+                        Linux/Mac: 'static/uploads/profile.jpg
+                        'Windows: 'static/uploads\profile.jpg'
+                        '''
+                        
+                        # Save the verified, clean bytes to disk safely
+                        with open(save_to, 'wb') as f:
+                            f.write(file_bytes)
+                    
+                        flash('Uploaded successfully and passed safety scans!', 'success')
+                        success = True
+                        method = 'file_upload'
+                    else:
+                        flash('Dimensions too small (expected: at least 300x300 px).', 'error')
+
+                except Exception as e:
+                    flash(f'Security scanning failed: {str(e)}', 'error')
             else:
                 flash('Invalid file type.', 'error')
+
 
         
         if success:
