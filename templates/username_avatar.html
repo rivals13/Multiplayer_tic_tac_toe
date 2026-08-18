@@ -56,7 +56,7 @@
          <h2 class="text-[#0A5457] opacity-70 text-[20px] py-[10px]">ViciousRegister2</h2>
         </div>
 
-        <a>
+        <a {% if game_mode == 'multiplayer' %} href="{{url_for('main.multiplayer')}}" {% else %} href="{{url_for('main.krishna')}}" {% endif %}>
         <div class="flex items-center justify-center my-[132px]">
   <button class="bg-[#D7B66F] w-[314px] h-[54px] rounded-full text-3xl text-[#FFFFFF] text-center">Tic Tac Toe</button>
         </div>

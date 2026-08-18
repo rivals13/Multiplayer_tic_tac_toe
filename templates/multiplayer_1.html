@@ -71,7 +71,7 @@
         </div>
         <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script> // loading the socket.io library in the code
         <script> //  socket logic using the  socket.io library!!
-        const socket = io();
+        const socket = io(); //function that returns a socket object
 
         socket.on("connect", function () {
         console.log("Connected to Socket.IO server");

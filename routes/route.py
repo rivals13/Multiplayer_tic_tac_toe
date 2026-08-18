@@ -26,6 +26,13 @@ def home():
 @main_bp.route("/username_selection" , methods=['POST','GET'])
 def username_selection():
 
+    mode = request.args.get('mode')
+
+    if mode:
+        session['game_mode'] = mode
+
+    print("Selected game mode:", session.get('game_mode'))
+
     r = RandomWord()
 
     # random nouns and adjectives for the usernames
@@ -175,10 +182,14 @@ def avatar_selection():
 @main_bp.route("/final")
 def final():
     method = request.args.get('method')
+    game_mode = session.get('game_mode')
 
     return render_template(
         'username_avatar.html',
-        method=method)
+        method=method,
+        game_mode=game_mode)
+
+
 
 @main_bp.route("/multiplayer")
 def multiplayer():
