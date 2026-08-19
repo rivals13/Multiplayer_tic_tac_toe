@@ -49,6 +49,7 @@
         <h1 class="py-[20px] opacity-50">Suggestions</h1>
          <div class="grid grid-cols-2 gap-x-6 gap-y-4 px-5 ">
             {% for username in username %}
+
             <button class="bg-[#E2E1E0] text-center w-[200px] h-[30px] rounded-full text-[#2B2A29]" id="username" onclick="updateUsername(this)">{{username}}</button>
 
             {% endfor %}
@@ -97,8 +98,24 @@ function Continue(){
     let inputField= document.getElementById('inputText');
     
     if(inputField && inputField.value){
-        console.log(inputField.value);
-        window.location.href = "{{ url_for('main.avatar_selection') }}";
+        let chosenUsername = inputField.value.trim();
+
+        // Send username to the backend session using POST fetch API
+        fetch("{{ url_for('main.username_selection') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username: chosenUsername })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === "success") {
+                // Navigate to next route on successful save
+                window.location.href = "{{ url_for('main.avatar_selection') }}";
+            }
+        })
+        .catch(error => console.error("Error updating session:", error));
     }
 }
 

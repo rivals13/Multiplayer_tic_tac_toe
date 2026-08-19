@@ -53,7 +53,7 @@
 
         <div  class="flex justify-center  items-center flex-col my-[-50px]">
          <h1 class="text-[26px] text-[#4D4D4C]">All Done!</h1>
-         <h2 class="text-[#0A5457] opacity-70 text-[20px] py-[10px]">ViciousRegister2</h2>
+         <h2 class="text-[#0A5457] opacity-70 text-[20px] py-[10px]">{{Current_user}}</h2>
         </div>
 
         <a {% if game_mode == 'multiplayer' %} href="{{url_for('main.multiplayer')}}" {% else %} href="{{url_for('main.krishna')}}" {% endif %}>

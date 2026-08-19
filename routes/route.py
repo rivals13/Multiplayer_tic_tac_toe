@@ -3,7 +3,7 @@ import io
 import yara
 import uuid
 import requests
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, session,jsonify
 from werkzeug.utils import secure_filename
 from PIL import Image
 from wonderwords import RandomWord
@@ -25,7 +25,12 @@ def home():
 
 @main_bp.route("/username_selection" , methods=['POST','GET'])
 def username_selection():
-
+    if request.method == 'POST':
+        data = request.get_json()
+        if data and 'username' in data:
+            session['username'] = data['username'].strip()
+            return jsonify({"status": "success"}), 200
+        return jsonify({"status": "error", "message": "No username provided"}), 400
     mode = request.args.get('mode')
 
     if mode:
@@ -183,17 +188,21 @@ def avatar_selection():
 def final():
     method = request.args.get('method')
     game_mode = session.get('game_mode')
+    Current_user = session.get('username')
+
 
     return render_template(
         'username_avatar.html',
         method=method,
-        game_mode=game_mode)
+        game_mode=game_mode,
+        Current_user=Current_user)
 
 
 
 @main_bp.route("/multiplayer")
 def multiplayer():
-    return render_template('multiplayer_1.html')
+    Current_user = session.get('username')
+    return render_template('multiplayer_1.html',Current_user=Current_user)
 
 @main_bp.route("/krishna") 
 def krishna():
