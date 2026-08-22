@@ -22,6 +22,13 @@ def register_socket_events(socketio):
         print(f"Socket ID: {socket_id}")
         print("Online players:", online_players)
 
+        '''
+
+        to make sure the searching/ matching of the players is  easier, the  keys or the usernames are basically emitted
+        to be  received  by the frontend....
+        '''
+        socketio.emit("online_players_list", list(online_players.keys())) 
+
 
 
 
@@ -38,3 +45,5 @@ def register_socket_events(socketio):
 
         print(f"{username} disconnected from server")
         print(f"Online players: {online_players}")
+        
+        socketio.emit("online_players_list", list(online_players.keys())) 
